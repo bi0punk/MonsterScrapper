@@ -1,2 +1,2 @@
 # ram-alert
-script snecillo para alertar sobre el consumo de momoria ram de nuestras terminales
+script sencillo para alertar sobre el consumo de memoria ram de nuestras terminales

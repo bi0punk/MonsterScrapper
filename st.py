@@ -59,7 +59,7 @@ while True:
     print(f'Extrayendo datos de la página {pagina_actual}...')
     url_actual = f'{base_url}&page={pagina_actual}'
 
-    respuesta = requests.get(url_actual)
+    respuesta = requests.get(url_actual, timeout=30)
     if respuesta.status_code == 200:
         if not obtener_datos_pagina(url_actual):
             print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')

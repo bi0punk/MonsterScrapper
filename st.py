@@ -1,5 +1,6 @@
 import requests
 import csv
+import random
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -67,6 +68,7 @@ while True:
     else:
         print(f'La página {pagina_actual} no está disponible. Deteniendo la extracción de datos.')
         break
+    time.sleep(random.uniform(1, 3))
 nombre_archivo_csv = guardar_datos_csv(productos)
 print(f'Los datos han sido guardados en {nombre_archivo_csv}.')
 

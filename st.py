@@ -59,15 +59,10 @@ while True:
     print(f'Extrayendo datos de la página {pagina_actual}...')
     url_actual = f'{base_url}&page={pagina_actual}'
 
-    respuesta = requests.get(url_actual, timeout=30)
-    if respuesta.status_code == 200:
-        if not obtener_datos_pagina(url_actual):
-            print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')
-            break
-        pagina_actual += 1
-    else:
-        print(f'La página {pagina_actual} no está disponible. Deteniendo la extracción de datos.')
+    if not obtener_datos_pagina(url_actual):
+        print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')
         break
+    pagina_actual += 1
     time.sleep(random.uniform(1, 3))
 nombre_archivo_csv = guardar_datos_csv(productos)
 print(f'Los datos han sido guardados en {nombre_archivo_csv}.')

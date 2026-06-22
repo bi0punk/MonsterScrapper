@@ -3,9 +3,13 @@ import os
 from datetime import datetime
 
 def get_latest_csv_filenames():
-    files = [file for file in os.listdir() if file.startswith("productos_cerveza_") and file.endswith(".csv")]
+    files = [file for file in os.listdir() if ("productos_cerveza_" in file or "si_productos_cerveza_" in file or "tt_productos_cerveza_" in file) and file.endswith(".csv")]
     files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
     return files[:2]
+
+def parse_chilean_price(price_str):
+    s = price_str.replace('$', '').replace('.', '').replace(',', '.')
+    return float(s)
 
 def read_csv(filename):
     data = []
@@ -19,12 +23,12 @@ def compare_prices(previous_csv, current_csv):
     comparison = []
     for current_item in current_csv:
         name = current_item['Nombre']
-        current_price = float(current_item['Precio'].replace('$', '').replace(',', ''))
+        current_price = parse_chilean_price(current_item['Precio'])
         previous_price = None
 
         for previous_item in previous_csv:
             if previous_item['Nombre'] == name:
-                previous_price = float(previous_item['Precio'].replace('$', '').replace(',', ''))
+                previous_price = parse_chilean_price(previous_item['Precio'])
                 break
 
         if previous_price is not None:

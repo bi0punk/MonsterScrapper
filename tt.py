@@ -17,6 +17,7 @@ base_url = 'https://www.falabella.com/falabella-cl/category/CATG10205/Cervezas?s
 productos = []
 
 def obtener_datos_pagina(url):
+    """Extrae productos de una página de búsqueda de Falabella."""
     driver.get(url)
     time.sleep(5) 
 
@@ -34,6 +35,7 @@ def obtener_datos_pagina(url):
 
     return True
 def guardar_datos_csv(productos):
+    """Guarda la lista de productos en un archivo CSV con timestamp."""
     ahora = datetime.now()
     fecha_hora_actual = ahora.strftime("%Y-%m-%d_%H-%M-%S")
     nombre_archivo_csv = f'tt_productos_cerveza_{fecha_hora_actual}.csv'

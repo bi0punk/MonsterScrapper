@@ -67,29 +67,35 @@ def guardar_datos_csv(productos):
             })
     return nombre_archivo_csv
 
-pagina_actual = 1
-try:
-    while True:
-        print(f'Extrayendo datos de la página {pagina_actual}...')
-        url_actual = f'{base_url}{pagina_actual}'
+def main():
+    """Ejecuta el flujo principal de scraping."""
+    pagina_actual = 1
+    try:
+        while True:
+            print(f'Extrayendo datos de la página {pagina_actual}...')
+            url_actual = f'{base_url}{pagina_actual}'
 
-        resultado = obtener_datos_pagina(url_actual)
-        if resultado == "empty":
-            print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')
-            break
-        elif resultado == "error":
-            print(f"Error en la página {pagina_actual}. Continuando con la siguiente.")
-            continue
+            resultado = obtener_datos_pagina(url_actual)
+            if resultado == "empty":
+                print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')
+                break
+            elif resultado == "error":
+                print(f"Error en la página {pagina_actual}. Continuando con la siguiente.")
+                continue
 
-        pagina_actual += 1
+            pagina_actual += 1
 
-    nombre_archivo_csv = guardar_datos_csv(productos)
-    print(f'Los datos han sido guardados en {nombre_archivo_csv}.')
+        nombre_archivo_csv = guardar_datos_csv(productos)
+        print(f'Los datos han sido guardados en {nombre_archivo_csv}.')
 
-    for idx, producto in enumerate(productos, start=1):
-        print(f'Producto {idx}:')
-        print(f'Nombre: {producto["nombre"]}')
-        print(f'Precio: {producto["precio"]}')
-        print('---')
-finally:
-    driver.quit()
+        for idx, producto in enumerate(productos, start=1):
+            print(f'Producto {idx}:')
+            print(f'Nombre: {producto["nombre"]}')
+            print(f'Precio: {producto["precio"]}')
+            print('---')
+    finally:
+        driver.quit()
+
+
+if __name__ == "__main__":
+    main()

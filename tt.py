@@ -4,6 +4,8 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 options = webdriver.ChromeOptions()
@@ -20,7 +22,9 @@ def obtener_datos_pagina(url):
     """Extrae productos de una página de búsqueda de Falabella. Retorna 'ok', 'empty' o 'error'."""
     try:
         driver.get(url)
-        time.sleep(5)
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'b[class*=pod-subTitle]'))
+        )
 
         nombres = driver.find_elements(By.CSS_SELECTOR, 'b[class*=pod-subTitle]')
         precios = driver.find_elements(By.CSS_SELECTOR, 'span[class*=copy10]')

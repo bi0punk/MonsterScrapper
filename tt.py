@@ -1,4 +1,5 @@
 import csv
+import sys
 import time
 from datetime import datetime
 from selenium import webdriver
@@ -13,7 +14,11 @@ options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+try:
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+except Exception as e:
+    print(f"Error al inicializar ChromeDriver: {e}")
+    sys.exit(1)
 
 base_url = 'https://www.falabella.com/falabella-cl/category/CATG10205/Cervezas?sred=cerveza&page='
 productos = []

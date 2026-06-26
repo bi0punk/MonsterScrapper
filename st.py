@@ -1,5 +1,6 @@
 import csv
 import random
+import sys
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -15,7 +16,11 @@ options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+try:
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+except Exception as e:
+    print(f"Error al inicializar ChromeDriver: {e}")
+    sys.exit(1)
 base_url = 'https://www.santaisabel.cl/busqueda?ft=cerveza'
 productos = []
 

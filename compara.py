@@ -4,17 +4,20 @@ from datetime import datetime
 
 
 def obtener_ultimos_csv():
+    """Obtiene los dos archivos CSV más recientes del directorio actual."""
     files = [file for file in os.listdir() if ("productos_cerveza_" in file or "si_productos_cerveza_" in file or "tt_productos_cerveza_" in file) and file.endswith(".csv")]
     files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
     return files[:2]
 
 
 def parsear_precio_chileno(price_str):
+    """Convierte un string de precio chileno a float."""
     s = price_str.replace('$', '').replace('.', '').replace(',', '.')
     return float(s)
 
 
 def leer_csv(filename):
+    """Lee un archivo CSV y retorna una lista de diccionarios."""
     data = []
     with open(filename, 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
@@ -24,6 +27,7 @@ def leer_csv(filename):
 
 
 def comparar_precios(csv_anterior, csv_actual):
+    """Compara precios entre dos listas de productos."""
     comparacion = []
     for current_item in csv_actual:
         name = current_item['Nombre']
@@ -50,6 +54,7 @@ def comparar_precios(csv_anterior, csv_actual):
 
 
 def guardar_comparacion_csv(comparacion):
+    """Guarda el resultado de la comparación en un CSV con timestamp."""
     filename = "comparacion_cerveza_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".csv"
     with open(filename, 'w', newline='', encoding='utf-8') as file:
         fieldnames = ['Nombre', 'Cambio']

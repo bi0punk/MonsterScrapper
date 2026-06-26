@@ -1,4 +1,3 @@
-import requests
 import csv
 import random
 from datetime import datetime

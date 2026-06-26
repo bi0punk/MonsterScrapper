@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 
-def obtener_ultimos_csv(directorio="."):
+def obtener_ultimos_csv(directorio: str = ".") -> list:
     """Obtiene los dos archivos CSV más recientes del directorio especificado."""
     try:
         archivos = [
@@ -17,7 +17,7 @@ def obtener_ultimos_csv(directorio="."):
         return []
 
 
-def parsear_precio_chileno(price_str):
+def parsear_precio_chileno(price_str: str) -> float:
     """Convierte un string de precio chileno a float. Retorna 0.0 si no es válido."""
     try:
         s = price_str.replace('$', '').replace('.', '').replace(',', '.')
@@ -27,7 +27,7 @@ def parsear_precio_chileno(price_str):
         return 0.0
 
 
-def leer_csv(filename):
+def leer_csv(filename: str) -> list:
     """Lee un archivo CSV y retorna una lista de diccionarios."""
     data = []
     with open(filename, 'r', encoding='utf-8') as file:
@@ -37,7 +37,7 @@ def leer_csv(filename):
     return data
 
 
-def comparar_precios(csv_anterior, csv_actual):
+def comparar_precios(csv_anterior: list, csv_actual: list) -> list:
     """Compara precios entre dos listas de productos."""
     comparacion = []
     for current_item in csv_actual:
@@ -64,7 +64,7 @@ def comparar_precios(csv_anterior, csv_actual):
     return comparacion
 
 
-def guardar_comparacion_csv(comparacion):
+def guardar_comparacion_csv(comparacion: list) -> None:
     """Guarda el resultado de la comparación en un CSV con timestamp."""
     filename = "comparacion_cerveza_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".csv"
     with open(filename, 'w', newline='', encoding='utf-8') as file:
@@ -75,7 +75,7 @@ def guardar_comparacion_csv(comparacion):
     print(f"Archivo '{filename}' generado exitosamente con la comparación.")
 
 
-def main():
+def main() -> None:
     latest_files = obtener_ultimos_csv()
     if len(latest_files) < 2:
         print("No se encontraron suficientes archivos CSV para comparar.")

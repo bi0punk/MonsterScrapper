@@ -11,9 +11,13 @@ def obtener_ultimos_csv():
 
 
 def parsear_precio_chileno(price_str):
-    """Convierte un string de precio chileno a float."""
-    s = price_str.replace('$', '').replace('.', '').replace(',', '.')
-    return float(s)
+    """Convierte un string de precio chileno a float. Retorna 0.0 si no es válido."""
+    try:
+        s = price_str.replace('$', '').replace('.', '').replace(',', '.')
+        return float(s)
+    except (ValueError, AttributeError):
+        print(f"Advertencia: no se pudo parsear el precio '{price_str}'")
+        return 0.0
 
 
 def leer_csv(filename):

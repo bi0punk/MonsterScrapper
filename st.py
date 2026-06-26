@@ -11,16 +11,19 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 
-options = webdriver.ChromeOptions()
-options.add_argument('--headless')  
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
+def init_driver():
+    """Inicializa y retorna el WebDriver en modo headless."""
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    try:
+        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    except Exception as e:
+        print(f"Error al inicializar ChromeDriver: {e}")
+        sys.exit(1)
 
-try:
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-except Exception as e:
-    print(f"Error al inicializar ChromeDriver: {e}")
-    sys.exit(1)
+driver = init_driver()
 base_url = 'https://www.santaisabel.cl/busqueda?ft=cerveza'
 productos = []
 

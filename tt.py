@@ -17,23 +17,27 @@ base_url = 'https://www.falabella.com/falabella-cl/category/CATG10205/Cervezas?s
 productos = []
 
 def obtener_datos_pagina(url):
-    """Extrae productos de una página de búsqueda de Falabella."""
-    driver.get(url)
-    time.sleep(5) 
+    """Extrae productos de una página de búsqueda de Falabella. Retorna 'ok', 'empty' o 'error'."""
+    try:
+        driver.get(url)
+        time.sleep(5)
 
-    nombres = driver.find_elements(By.CSS_SELECTOR, 'b[class*=pod-subTitle]')
-    precios = driver.find_elements(By.CSS_SELECTOR, 'span[class*=copy10]')
+        nombres = driver.find_elements(By.CSS_SELECTOR, 'b[class*=pod-subTitle]')
+        precios = driver.find_elements(By.CSS_SELECTOR, 'span[class*=copy10]')
 
-    if not nombres or not precios:
-        return False
+        if not nombres or not precios:
+            return "empty"
 
-    for nombre, precio in zip(nombres, precios):
-        productos.append({
-            'nombre': nombre.text.strip(),
-            'precio': precio.text.strip()
-        })
+        for nombre, precio in zip(nombres, precios):
+            productos.append({
+                'nombre': nombre.text.strip(),
+                'precio': precio.text.strip()
+            })
 
-    return True
+        return "ok"
+    except Exception as e:
+        print(f"Error al procesar la página {url}: {e}")
+        return "error"
 
 def guardar_datos_csv(productos):
     """Guarda la lista de productos en un archivo CSV con timestamp."""
@@ -56,9 +60,13 @@ while True:
     print(f'Extrayendo datos de la página {pagina_actual}...')
     url_actual = f'{base_url}{pagina_actual}'
 
-    if not obtener_datos_pagina(url_actual):
+    resultado = obtener_datos_pagina(url_actual)
+    if resultado == "empty":
         print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')
         break
+    elif resultado == "error":
+        print(f"Error en la página {pagina_actual}. Continuando con la siguiente.")
+        continue
 
     pagina_actual += 1
 

@@ -18,24 +18,28 @@ base_url = 'https://www.santaisabel.cl/busqueda?ft=cerveza'
 productos = []
 
 def obtener_datos_pagina(url):
-    """Extrae productos de una página de búsqueda."""
-    driver.get(url)
-    time.sleep(5)  
-    if not driver.find_elements(By.CSS_SELECTOR, 'span.prices-main-price') or \
-       not driver.find_elements(By.CSS_SELECTOR, 'a.product-card-name'):
-        return False  
+    """Extrae productos de una página de búsqueda. Retorna 'ok', 'empty' o 'error'."""
+    try:
+        driver.get(url)
+        time.sleep(5)
+        if not driver.find_elements(By.CSS_SELECTOR, 'span.prices-main-price') or \
+           not driver.find_elements(By.CSS_SELECTOR, 'a.product-card-name'):
+            return "empty"
 
-    precios = driver.find_elements(By.CSS_SELECTOR, 'span.prices-main-price')
-    nombres = driver.find_elements(By.CSS_SELECTOR, 'a.product-card-name')
+        precios = driver.find_elements(By.CSS_SELECTOR, 'span.prices-main-price')
+        nombres = driver.find_elements(By.CSS_SELECTOR, 'a.product-card-name')
 
-    for precio, nombre in zip(precios, nombres):
-        productos.append({
-            'nombre': nombre.text,
-            'precio': precio.text,
-            'enlace': nombre.get_attribute('href')
-        })
+        for precio, nombre in zip(precios, nombres):
+            productos.append({
+                'nombre': nombre.text,
+                'precio': precio.text,
+                'enlace': nombre.get_attribute('href')
+            })
 
-    return True  
+        return "ok"
+    except Exception as e:
+        print(f"Error al procesar la página {url}: {e}")
+        return "error"
 
 def guardar_datos_csv(productos):
     """Guarda la lista de productos en un archivo CSV con timestamp."""
@@ -60,9 +64,13 @@ while True:
     print(f'Extrayendo datos de la página {pagina_actual}...')
     url_actual = f'{base_url}&page={pagina_actual}'
 
-    if not obtener_datos_pagina(url_actual):
+    resultado = obtener_datos_pagina(url_actual)
+    if resultado == "empty":
         print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')
         break
+    elif resultado == "error":
+        print(f"Error en la página {pagina_actual}. Continuando con la siguiente.")
+        continue
     pagina_actual += 1
     time.sleep(random.uniform(1, 3))
 nombre_archivo_csv = guardar_datos_csv(productos)

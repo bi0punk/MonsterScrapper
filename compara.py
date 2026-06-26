@@ -3,11 +3,18 @@ import os
 from datetime import datetime
 
 
-def obtener_ultimos_csv():
-    """Obtiene los dos archivos CSV más recientes del directorio actual."""
-    files = [file for file in os.listdir() if ("productos_cerveza_" in file or "si_productos_cerveza_" in file or "tt_productos_cerveza_" in file) and file.endswith(".csv")]
-    files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-    return files[:2]
+def obtener_ultimos_csv(directorio="."):
+    """Obtiene los dos archivos CSV más recientes del directorio especificado."""
+    try:
+        archivos = [
+            f for f in os.listdir(directorio)
+            if f.endswith(".csv") and "productos_cerveza_" in f
+        ]
+        archivos.sort(key=lambda x: os.path.getmtime(os.path.join(directorio, x)), reverse=True)
+        return archivos[:2]
+    except (FileNotFoundError, PermissionError) as e:
+        print(f"Error al leer el directorio: {e}")
+        return []
 
 
 def parsear_precio_chileno(price_str):

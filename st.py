@@ -18,6 +18,7 @@ base_url = 'https://www.santaisabel.cl/busqueda?ft=cerveza'
 productos = []
 
 def obtener_datos_pagina(url):
+    """Extrae productos de una página de búsqueda."""
     driver.get(url)
     time.sleep(5)  
     if not driver.find_elements(By.CSS_SELECTOR, 'span.prices-main-price') or \
@@ -37,6 +38,7 @@ def obtener_datos_pagina(url):
     return True  
 
 def guardar_datos_csv(productos):
+    """Guarda la lista de productos en un archivo CSV con timestamp."""
     ahora = datetime.now()
     fecha_hora_actual = ahora.strftime("%Y-%m-%d_%H-%M-%S")
     nombre_archivo_csv = f'si_productos_cerveza_{fecha_hora_actual}.csv'

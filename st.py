@@ -11,7 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 
-def init_driver():
+def init_driver() -> webdriver.Chrome:
     """Inicializa y retorna el WebDriver en modo headless."""
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
@@ -26,7 +26,7 @@ def init_driver():
 driver = init_driver()
 base_url = 'https://www.santaisabel.cl/busqueda?ft=cerveza'
 
-def obtener_datos_pagina(url, productos):
+def obtener_datos_pagina(url: str, productos: list) -> str:
     """Extrae productos de una página de búsqueda. Retorna 'ok', 'empty' o 'error'."""
     try:
         driver.get(url)
@@ -52,7 +52,7 @@ def obtener_datos_pagina(url, productos):
         print(f"Error al procesar la página {url}: {e}")
         return "error"
 
-def guardar_datos_csv(productos):
+def guardar_datos_csv(productos: list) -> str:
     """Guarda la lista de productos en un archivo CSV con timestamp."""
     ahora = datetime.now()
     fecha_hora_actual = ahora.strftime("%Y-%m-%d_%H-%M-%S")
@@ -69,7 +69,7 @@ def guardar_datos_csv(productos):
             })
     return nombre_archivo_csv
 
-def main():
+def main() -> None:
     """Ejecuta el flujo principal de scraping."""
     pagina_actual = 1
     productos = []

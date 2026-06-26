@@ -24,9 +24,8 @@ def init_driver():
 driver = init_driver()
 
 base_url = 'https://www.falabella.com/falabella-cl/category/CATG10205/Cervezas?sred=cerveza&page='
-productos = []
 
-def obtener_datos_pagina(url):
+def obtener_datos_pagina(url, productos):
     """Extrae productos de una página de búsqueda de Falabella. Retorna 'ok', 'empty' o 'error'."""
     try:
         driver.get(url)
@@ -70,12 +69,13 @@ def guardar_datos_csv(productos):
 def main():
     """Ejecuta el flujo principal de scraping."""
     pagina_actual = 1
+    productos = []
     try:
         while True:
             print(f'Extrayendo datos de la página {pagina_actual}...')
             url_actual = f'{base_url}{pagina_actual}'
 
-            resultado = obtener_datos_pagina(url_actual)
+            resultado = obtener_datos_pagina(url_actual, productos)
             if resultado == "empty":
                 print(f'No hay más productos en la página {pagina_actual}. Deteniendo la extracción de datos.')
                 break

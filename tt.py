@@ -34,6 +34,7 @@ def obtener_datos_pagina(url):
         })
 
     return True
+
 def guardar_datos_csv(productos):
     """Guarda la lista de productos en un archivo CSV con timestamp."""
     ahora = datetime.now()

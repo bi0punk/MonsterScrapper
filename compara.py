@@ -30,7 +30,7 @@ def parsear_precio_chileno(price_str: str) -> float:
 def leer_csv(filename: str) -> list:
     """Lee un archivo CSV y retorna una lista de diccionarios."""
     data = []
-    with open(filename, 'r', encoding='utf-8') as file:
+    with open(filename, encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             data.append(row)

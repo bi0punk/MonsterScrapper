@@ -1,13 +1,14 @@
 import csv
 import sys
-import time
 from datetime import datetime
+
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+
 
 def init_driver() -> webdriver.Chrome:
     """Inicializa y retorna el WebDriver en modo headless."""
@@ -21,7 +22,7 @@ def init_driver() -> webdriver.Chrome:
         print(f"Error al inicializar ChromeDriver: {e}")
         sys.exit(1)
 
-driver = init_driver()
+driver: webdriver.Chrome | None = None
 
 base_url = 'https://www.falabella.com/falabella-cl/category/CATG10205/Cervezas?sred=cerveza&page='
 
@@ -39,7 +40,7 @@ def obtener_datos_pagina(url: str, productos: list) -> str:
         if not nombres or not precios:
             return "empty"
 
-        for nombre, precio in zip(nombres, precios):
+        for nombre, precio in zip(nombres, precios, strict=False):
             productos.append({
                 'nombre': nombre.text.strip(),
                 'precio': precio.text.strip()
@@ -68,6 +69,8 @@ def guardar_datos_csv(productos: list) -> str:
 
 def main() -> None:
     """Ejecuta el flujo principal de scraping."""
+    global driver
+    driver = init_driver()
     pagina_actual = 1
     productos = []
     try:

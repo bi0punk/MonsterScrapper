@@ -1,14 +1,15 @@
 import csv
 import random
 import sys
-from datetime import datetime
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 import time
+from datetime import datetime
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def init_driver() -> webdriver.Chrome:
@@ -23,7 +24,7 @@ def init_driver() -> webdriver.Chrome:
         print(f"Error al inicializar ChromeDriver: {e}")
         sys.exit(1)
 
-driver = init_driver()
+driver: webdriver.Chrome | None = None
 base_url = 'https://www.santaisabel.cl/busqueda?ft=cerveza'
 
 def obtener_datos_pagina(url: str, productos: list) -> str:
@@ -40,7 +41,7 @@ def obtener_datos_pagina(url: str, productos: list) -> str:
         precios = driver.find_elements(By.CSS_SELECTOR, 'span.prices-main-price')
         nombres = driver.find_elements(By.CSS_SELECTOR, 'a.product-card-name')
 
-        for precio, nombre in zip(precios, nombres):
+        for precio, nombre in zip(precios, nombres, strict=False):
             productos.append({
                 'nombre': nombre.text,
                 'precio': precio.text,
@@ -71,6 +72,8 @@ def guardar_datos_csv(productos: list) -> str:
 
 def main() -> None:
     """Ejecuta el flujo principal de scraping."""
+    global driver
+    driver = init_driver()
     pagina_actual = 1
     productos = []
 

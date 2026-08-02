@@ -40,6 +40,7 @@ Web scraping tool for Chilean e-commerce sites (Santa Isabel supermarket, Falabe
 |---|---|
 | `st.py` | Scrapea Santa Isabel (productos cerveza). |
 | `tt.py` | Scrapea Falabella (productos cerveza). |
+| `scraper.py` | Lógica compartida parametrizada usada por `st.py` y `tt.py`. |
 | `compara.py` | Compara los dos CSV dumps más recientes para detectar cambios de precio. |
 
 ## Requisitos
@@ -63,7 +64,8 @@ python tt.py        # scraping Falabella → CSV
 python compara.py   # compara los dos CSVs más recientes
 ```
 
-Los CSV se nombran `productos_cerveza_<site>_<timestamp>.csv` en el directorio actual.
+Los CSV se nombran `si_productos_cerveza_<timestamp>.csv` (Santa Isabel) y
+`tt_productos_cerveza_<timestamp>.csv` (Falabella) en el directorio actual.
 
 ## Tests
 

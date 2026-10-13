@@ -70,6 +70,7 @@ def init_driver() -> webdriver.Chrome:
 
 def obtener_datos_pagina(url: str, productos: list, config: SitioConfig) -> str:
     """Extrae productos de una página de búsqueda. Retorna 'ok', 'empty' o 'error'."""
+    assert driver is not None
     try:
         driver.get(url)
         WebDriverWait(driver, 10).until(
@@ -121,7 +122,7 @@ def main(config: SitioConfig) -> None:
     global driver
     driver = init_driver()
     pagina_actual = 1
-    productos = []
+    productos: list[dict[str, str]] = []
 
     try:
         while True:
